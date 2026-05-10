@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ניהול מלאי</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1> 📝מערכת ניהול מלאי</h1>
+
+    <hr>
+
+    <h3>הוספת פריט חדש:</h3>
+
+    <div class="form">
+        <input type="text" id="itemName" placeholder="שם הפריט">
+        <input type="number" id="itemQty" placeholder="כמות">
+        <button onclick="addItem()">הוסף</button>
+    </div>
+
+    <h3>רשימת מלאי:</h3>
+
+    <ol id="inventory-list" class="list"></ol>
+</div>
+
+<script>
+    async function loadItems() {
+        const items = await fetch('/api/items').then(r => r.json());
+        const list = document.getElementById('inventory-list');
+        list.innerHTML = '';
+
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.classList.add('card');
+
+            li.innerHTML = `
+                <span class="name">${item.name}</span>
+                <span class="qty">${item.quantity}</span>
+            `;
+
+            list.appendChild(li);
+        });
+    }
+
+    async function addItem() {
+        const name = document.getElementById('itemName').value;
+        const quantity = document.getElementById('itemQty').value;
+
+        await fetch('/api/items', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, quantity: parseInt(quantity) })
+        });
+
+        loadItems();
+    }
+
+    async function deleteItem(id) {
+        await fetch(`/api/items/${id}`, {
+            method: 'DELETE'
+        });
+
+        loadItems();
+    }
+
+    loadItems();
+</script>
+
+</body>
+</html>
