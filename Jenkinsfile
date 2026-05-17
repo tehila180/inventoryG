@@ -74,39 +74,38 @@ pipeline {
         }
     }
 
-    post {
+   post {
 
-        success {
+    success {
 
-            echo "✅ Pipeline completed successfully!"
-        }
-
-        failure {
-
-            echo "❌ Pipeline failed!"
-        }
-
-        always {
-
-            echo "📌 Pipeline finished."
-        }
-
-        // ✉ שליחת אימייל
-        always {
-
-            mail(
-                to: 'test@example.com',
-                subject: "Job Status: ${currentBuild.currentResult}",
-                body: """
-                Jenkins Job Finished
-
-                Status: ${currentBuild.currentResult}
-
-                Build Number: ${env.BUILD_NUMBER}
-
-                Job Name: ${env.JOB_NAME}
-                """
-            )
-        }
+        echo "✅ Pipeline completed successfully!"
     }
+
+    failure {
+
+        echo "❌ Pipeline failed!"
+    }
+
+    always {
+
+        echo "📌 Pipeline finished."
+
+        // שליחת אימייל
+        mail(
+            to: 'test@example.com',
+
+            subject: "Job Status: ${currentBuild.currentResult}",
+
+            body: """
+            Jenkins Job Finished
+
+            Status: ${currentBuild.currentResult}
+
+            Build Number: ${env.BUILD_NUMBER}
+
+            Job Name: ${env.JOB_NAME}
+            """
+        )
+    }
+}
 }
