@@ -74,17 +74,19 @@ pipeline {
         }
     }
 
-   post {
-
+  post {
     success {
-
-        echo "✅ Pipeline completed successfully!"
+        mail to: 'yourmail@gmail.com',
+             subject: "Build Success: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+             body: "The pipeline for ${env.JOB_NAME} ran successfully."
     }
 
     failure {
-
-        echo "❌ Pipeline failed!"
+        mail to: 'yourmail@gmail.com',
+             subject: "Build Failed: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
+             body: "Check Jenkins console for details."
     }
+
 
     always {
 
@@ -92,7 +94,7 @@ pipeline {
 
         // שליחת אימייל
         mail(
-            to: 'test@example.com',
+            to: 'tehila.ch12@gmail.com',
 
             subject: "Job Status: ${currentBuild.currentResult}",
 
