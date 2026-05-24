@@ -22,7 +22,7 @@ pipeline {
 
             steps {
 
-              
+                dir("${params.DIR_PATH}") {
 
                     echo "Building Frontend..."
 
@@ -31,7 +31,7 @@ pipeline {
                     echo "Building Backend..."
 
                     bat "docker build -t ${BACKEND_IMAGE} ./backend"
-                
+                }
             }
         }
  stage("push images to ECR") {
@@ -40,7 +40,7 @@ pipeline {
     bat "docker tag ${FRONTEND_IMAGE} 028210901910.dkr.ecr.us-east-1.amazonaws.com/${FRONTEND_IMAGE}"
     bat "docker tag ${BACKEND_IMAGE}  028210901910.dkr.ecr.us-east-1.amazonaws.com/${BACKEND_IMAGE} "
 bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/${FRONTEND_IMAGE}"
-bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/${BACKEND_IMAGE}"    }
+bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/${BACKEND_IMAGE}"
 }
         stage('Load to Minikube') {
 
