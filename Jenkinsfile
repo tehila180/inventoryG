@@ -22,7 +22,7 @@ pipeline {
 
             steps {
 
-                dir("${params.DIR_PATH}") {
+              
 
                     echo "Building Frontend..."
 
@@ -31,7 +31,7 @@ pipeline {
                     echo "Building Backend..."
 
                     bat "docker build -t ${BACKEND_IMAGE} ./backend"
-                }
+                
             }
         }
  stage("push images to ECR") {
