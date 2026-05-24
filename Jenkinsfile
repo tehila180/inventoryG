@@ -34,8 +34,9 @@
                 }
             }
         }
- stage('Build images') {
-stage("push images to ECR") {
+ stage("push images to ECR") {
+    steps {
+        echo "Pushing images to ECR..."
     bat "docker tag ${FRONTEND_IMAGE} 028210901910.dkr.ecr.us-east-1.amazonaws.com/${FRONTEND_IMAGE}"
     bat "docker tag ${BACKEND_IMAGE}  028210901910.dkr.ecr.us-east-1.amazonaws.com/${BACKEND_IMAGE} "
     bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/frontend-t.ch:latest"
