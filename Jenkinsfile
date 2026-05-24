@@ -2,12 +2,7 @@ pipeline {
 
     agent any
 
-    parameters {
-        string(
-            name: 'DIR_PATH',
-            description: 'enter project directory path'
-        )
-    }
+   
 
     environment {
 
@@ -16,23 +11,14 @@ pipeline {
         BACKEND_IMAGE = "backend-t.ch:v${env.BUILD_NUMBER}"
     }
 
-    stages {
+   steps {
 
-        stage('Build All Images') {
+    echo "Building Frontend..."
+    bat "docker build -t ${FRONTEND_IMAGE} ./frontend"
 
-            steps {
-
-                dir("${params.DIR_PATH}") {
-
-                    echo "Building Frontend..."
-
-                    bat "docker build -t ${FRONTEND_IMAGE} ./frontend"
-
-                    echo "Building Backend..."
-
-                    bat "docker build -t ${BACKEND_IMAGE} ./backend"
-                }
-            }
+    echo "Building Backend..."
+    bat "docker build -t ${BACKEND_IMAGE} ./backend"
+}
         }
  stage("push images to ECR") {
     steps {
@@ -42,6 +28,8 @@ pipeline {
 bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/${FRONTEND_IMAGE}"
 bat "docker push 028210901910.dkr.ecr.us-east-1.amazonaws.com/${BACKEND_IMAGE}"
 }
+}
+
         stage('Load to Minikube') {
 
             steps {
